@@ -12,7 +12,7 @@ using DocUtils;
 
 /**
  * This project attempts to generate a full-fledged documentation
- * of the NME API by reading the data that comes with the open-source
+ * of the OpenFL API by reading the data that comes with the open-source
  * Flex SDK.
  */
 class Main 
@@ -41,7 +41,7 @@ class Main
 	public static function main() 
 	{
 		// Program header.
-		Lib.println("NME Documentation Generator v0.1 - (c) 2012 Samuel Loretan");
+		Lib.println("OpenFL Documentation Generator v0.1 - (c) 2012 Samuel Loretan");
 		
 		// Default program arguments.
 		var locale = "en_US";
@@ -105,8 +105,8 @@ class Main
 		_doc = new DocBrowser();
 		indexer.iter(fetchDocumentation);
 		
-		// Browse the NME source code to fill the documentation.
-		Lib.println("Applying the documentation to NME source...");
+		// Browse the OpenFL source code to fill the documentation.
+		Lib.println("Applying the documentation to OpenFL source...");
 		fillDir(_srcInput);
 		
 		// We're done!
@@ -127,7 +127,7 @@ class Main
 	}
 	
 	/**
-	 * Fills the documentation in NME source code in the given directory.
+	 * Fills the documentation in OpenFL source code in the given directory.
 	 */
 	private static function fillDir(path : String) : Void
 	{
@@ -141,7 +141,7 @@ class Main
 	}
 	
 	/**
-	 * Fills the documentation in NME source code in the given file.
+	 * Fills the documentation in OpenFL source code in the given file.
 	 */
 	private static function fillFile(path : String) : Void
 	{
@@ -210,7 +210,7 @@ class Main
 				var packageReg = ~/package ([a-z\.]+);/;
 				if (packageReg.match(line)) {
 					var packageName = packageReg.matched(1);
-					packageName = packageName.replace("nme", "flash");
+					packageName = packageName.replace("openfl", "flash");
 					
 					// Let's look for the documentation of that package.
 					currentPackage = _doc.getPackageDoc(packageName);
