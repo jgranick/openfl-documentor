@@ -3,9 +3,8 @@ import content.PackageDoc;
 import content.ParamDoc;
 import content.PropertyDoc;
 import haxe.Http;
-import neko.FileSystem;
-import neko.io.File;
-import neko.Lib;
+import sys.FileSystem;
+import sys.io.File;
 using StringTools;
 using Lambda;
 using DocUtils;
@@ -41,7 +40,7 @@ class Main
 	public static function main() 
 	{
 		// Program header.
-		Lib.println("OpenFL Documentation Generator v0.1 - (c) 2012 Samuel Loretan");
+		Sys.println("OpenFL Documentation Generator v0.1 - (c) 2012 Samuel Loretan");
 		
 		// Default program arguments.
 		var locale = "en_US";
@@ -91,7 +90,7 @@ class Main
 		
 		// Configuring proxy if there's any.
 		if (proxy != null) {
-			Lib.println("Using proxy " + proxy + "...");
+			Sys.println("Using proxy " + proxy + "...");
 			var proxyData = proxy.split(":");
 			Http.PROXY = { host: proxyData[0], port: Std.parseInt(proxyData[1]), auth: null };
 		}
@@ -101,16 +100,16 @@ class Main
 		var indexer = new DocIndexer(url);
 		
 		// Fetch all that documentation.
-		Lib.println("Downloading the Flex SDK documentation (locale: " + locale + ")...");
+		Sys.println("Downloading the Flex SDK documentation (locale: " + locale + ")...");
 		_doc = new DocBrowser();
 		indexer.iter(fetchDocumentation);
 		
 		// Browse the OpenFL source code to fill the documentation.
-		Lib.println("Applying the documentation to OpenFL source...");
+		Sys.println("Applying the documentation to OpenFL source...");
 		fillDir(_srcInput);
 		
 		// We're done!
-		Lib.println("Completed!");
+		Sys.println("Completed!");
 	}
 	
 	/**
@@ -120,7 +119,7 @@ class Main
 	{
 		// Extracting the package name.
 		var pack = url.substring(url.lastIndexOf("/") + 1, url.lastIndexOf("."));
-		if(_verbose) Lib.println("  Fetching documentation for package " + pack + "...");
+		if(_verbose) Sys.println("  Fetching documentation for package " + pack + "...");
 		
 		// Download and parse the data.
 		_doc.addDocumentation(DocParser.parseFromUrl(url));
@@ -146,7 +145,7 @@ class Main
 	private static function fillFile(path : String) : Void
 	{
 		// Status display.
-		if (_verbose) Lib.println("  Applying documentation to " + path + "...");
+		if (_verbose) Sys.println("  Applying documentation to " + path + "...");
 		
 		// Preparing output directory.
 		var relPath = path.substr(_srcInput.length + 1);
@@ -239,7 +238,7 @@ class Main
 					// We do, let's print the doc.
 					else {
 						if (_verbose)
-							Lib.println("    Adding documentation to class " + className + "...");
+							Sys.println("    Adding documentation to class " + className + "...");
 						
 						// Opening documentation block.
 						output.writeLine(indent + "/**");
@@ -293,7 +292,7 @@ class Main
 					// We do, let's print the doc.
 					else {
 						if (_verbose)
-							Lib.println("      Adding documentation to method " + methodName + "...");
+							Sys.println("      Adding documentation to method " + methodName + "...");
 						
 						// Starting documentation block.
 						output.writeLine();
@@ -381,7 +380,7 @@ class Main
 					// We do, let's print the doc.
 					else {
 						if (_verbose)
-							Lib.println("      Adding documentation to property " + propertyName + "...");
+							Sys.println("      Adding documentation to property " + propertyName + "...");
 						
 						// Starting documentation block.
 						output.writeLine();

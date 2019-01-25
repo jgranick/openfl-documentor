@@ -38,6 +38,7 @@ class DocIndexer
 	 */
 	private function load(url) : Void {
 		_packages = [];
+		trace (url);
 		parse(Xml.parse(Http.requestUrl(url)).firstElement());
 	}
 	

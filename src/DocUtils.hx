@@ -3,8 +3,7 @@ import content.EventDoc;
 import content.ExceptionDoc;
 import content.ParamDoc;
 import content.ReturnDoc;
-import haxe.Stack;
-import neko.io.FileOutput;
+import sys.io.FileOutput;
 using DocUtils;
 using StringTools;
 
@@ -68,7 +67,7 @@ class DocUtils
 	/**
 	 * Writes the documentation about a parameter.
 	 */
-	public static function writeDocParams(output : FileOutput, indent : String, params : List<ParamDoc>) : Void
+	public static function writeDocParams(output : FileOutput, indent : String, params : Array<ParamDoc>) : Void
 	{
 		// Get the length of the longest parameter name in that method.
 		var maxLength = 0;

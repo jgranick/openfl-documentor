@@ -19,7 +19,7 @@ class DocParser
 	{
 		var packageDoc = new PackageDoc();
 		var data = Xml.parse(Http.requestUrl(url)).firstElement();
-		data.iter(callback(parsePackage, packageDoc));
+		data.iter(parsePackage.bind(packageDoc));
 		return packageDoc;
 	}
 	
@@ -43,17 +43,17 @@ class DocParser
 			case "apiClassifier":
 				// Describes a class contained in this package.
 				var classDoc = new ClassDoc();
-				data.iter(callback(parseClass, classDoc));
+				data.iter(parseClass.bind(classDoc));
 				pack.classes.push(classDoc);
 			case "apiOperation":
 				// Describes a global function contained in this package.
 				var methodDoc = new MethodDoc();
-				data.iter(callback(parseMethod, methodDoc));
+				data.iter(parseMethod.bind(methodDoc));
 				pack.methods.push(methodDoc);
 			case "apiValue":
 				// Describes a global constant contained in this package.
 				var propDoc = new PropertyDoc();
-				data.iter(callback(parseProperty, propDoc));
+				data.iter(parseProperty.bind(propDoc));
 				pack.properties.push(propDoc);
 			default:
 				trace("Warning: unknown package node '" + data.nodeName + "'.");
@@ -78,29 +78,29 @@ class DocParser
 				// Informations about the class availability, and keywords.
 			case "apiClassifierDetail":
 				// Details about the class.
-				data.iter(callback(parseClassDetails, clazz));
+				data.iter(parseClassDetails.bind(clazz));
 			case "related-links":
 				// Links to stuff related to that class.
 			case "adobeApiEvent":
 				// Event that can be dispatched by that class.
 				var eventDoc = new EventDoc();
-				data.iter(callback(parseEvent, eventDoc));
+				data.iter(parseEvent.bind(eventDoc));
 				clazz.events.push(eventDoc);
 			case "apiConstructor":
 				// Constructor for that class.
 				// There might be multiple, but only in edge cases we don't care about.
 				var constructorDoc = new MethodDoc();
-				data.iter(callback(parseConstructor, constructorDoc));
+				data.iter(parseConstructor.bind(constructorDoc));
 				clazz.constructor = constructorDoc;
 			case "apiOperation":
 				// Method on that class.
 				var methodDoc = new MethodDoc();
-				data.iter(callback(parseMethod, methodDoc));
+				data.iter(parseMethod.bind(methodDoc));
 				clazz.methods.push(methodDoc);
 			case "apiValue":
 				// Property on that class.
 				var propDoc = new PropertyDoc();
-				data.iter(callback(parseProperty, propDoc));
+				data.iter(parseProperty.bind(propDoc));
 				clazz.properties.push(propDoc);
 			default:
 				trace("Warning: unknown class node '" + data.nodeName + "'.");
@@ -148,7 +148,7 @@ class DocParser
 				// Links to stuff related to that event.
 			case "adobeApiEventDetail":
 				// Details about the event.
-				data.iter(callback(parseEventDetails, event));
+				data.iter(parseEventDetails.bind(event));
 			default:
 				trace("Warning: unknown event node '" + data.nodeName + "'.");
 		}
@@ -164,7 +164,7 @@ class DocParser
 		{
 			case "adobeApiEventDef":
 				// Class of the event, and event type.
-				data.iter(callback(parseEventDef, event));
+				data.iter(parseEventDef.bind(event));
 			case "apiDesc":
 				// Description of the event.
 				event.fullDesc = parseDescription(data);
@@ -220,13 +220,13 @@ class DocParser
 				// Informations about the constructor availability.
 			case "apiConstructorDetail":
 				// Details about the constructor.
-				data.iter(callback(parseConstructorDetails, constructor));
+				data.iter(parseConstructorDetails.bind(constructor));
 			case "related-links":
 				// Links related to that constructor.
 			case "adobeApiEvent":
 				// Event that can be dispatched by that constructor.
 				var eventDoc = new EventDoc();
-				data.iter(callback(parseEvent, eventDoc));
+				data.iter(parseEvent.bind(eventDoc));
 				constructor.events.push(eventDoc);
 			default:
 				trace("Warning: unknown constructor node '" + data.nodeName + "'.");
@@ -243,7 +243,7 @@ class DocParser
 		{
 			case "apiConstructorDef":
 				// Level of access of the constructor.
-				data.iter(callback(parseConstructorDef, constructor));
+				data.iter(parseConstructorDef.bind(constructor));
 			case "apiDesc":
 				// Full description of the constructor method.
 				constructor.fullDesc = parseDescription(data);
@@ -268,12 +268,12 @@ class DocParser
 			case "apiParam":
 				// Parameter of that constructor.
 				var paramDoc : ParamDoc = new ParamDoc();
-				data.iter(callback(parseParam, paramDoc));
+				data.iter(parseParam.bind(paramDoc));
 				constructor.parameters.push(paramDoc);
 			case "apiException":
 				// Exception that can be raised when calling this constructor.
 				var exceptionDoc : ExceptionDoc = new ExceptionDoc();
-				data.iter(callback(parseException, exceptionDoc));
+				data.iter(parseException.bind(exceptionDoc));
 				constructor.exceptions.push(exceptionDoc);
 			case "apiTipTexts":
 				// Tips associated with this constructor.
@@ -300,11 +300,11 @@ class DocParser
 				// Informations about the method availability.
 			case "apiOperationDetail":
 				// Details about the method.
-				data.iter(callback(parseMethodDetails, method));
+				data.iter(parseMethodDetails.bind(method));
 			case "adobeApiEvent":
 				// Event that can be dispatched by that method.
 				var eventDoc = new EventDoc();
-				data.iter(callback(parseEvent, eventDoc));
+				data.iter(parseEvent.bind(eventDoc));
 				method.events.push(eventDoc);
 			case "related-links":
 				// Links related to that method.
@@ -323,7 +323,7 @@ class DocParser
 		{
 			case "apiOperationDef":
 				// Definition of the method.
-				data.iter(callback(parseMethodDef, method));
+				data.iter(parseMethodDef.bind(method));
 			case "apiDesc":
 				// Full description of the method.
 				method.fullDesc = parseDescription(data);
@@ -348,19 +348,19 @@ class DocParser
 			case "apiException":
 				// Exception that can be raised by that method.
 				var exceptionDoc : ExceptionDoc = new ExceptionDoc();
-				data.iter(callback(parseException, exceptionDoc));
+				data.iter(parseException.bind(exceptionDoc));
 				method.exceptions.push(exceptionDoc);
 			case "apiReturn":
 				// Return type of the method.
 				var returnDoc : ReturnDoc = new ReturnDoc();
-				data.iter(callback(parseReturn, returnDoc));
+				data.iter(parseReturn.bind(returnDoc));
 				if (method.returnVal != null)
 					throw "A return value was already bound to the method.";
 				method.returnVal = returnDoc;
 			case "apiParam":
 				// Parameter of that method.
 				var paramDoc : ParamDoc = new ParamDoc();
-				data.iter(callback(parseParam, paramDoc));
+				data.iter(parseParam.bind(paramDoc));
 				method.parameters.push(paramDoc);
 			case "apiTipTexts":
 				// Tips associated with this method.
@@ -501,7 +501,7 @@ class DocParser
 				// Links related to that property.
 			case "apiValueDetail":
 				// Details about the property.
-				data.iter(callback(parsePropertyDetails, property));
+				data.iter(parsePropertyDetails.bind(property));
 			default:
 				trace("Warning: unknown property node '" + data.nodeName + "'.");
 		}
@@ -520,7 +520,7 @@ class DocParser
 				property.fullDesc = parseDescription(data);
 			case "apiValueDef":
 				// Definition of that property.
-				data.iter(callback(parsePropertyDef, property));
+				data.iter(parsePropertyDef.bind(property));
 			case "example":
 				// Example of usage of that property (in AS3).
 			default:
@@ -559,7 +559,7 @@ class DocParser
 			case "apiException":
 				// Exception that can be raised when calling this property.
 				var exceptionDoc : ExceptionDoc = new ExceptionDoc();
-				data.iter(callback(parseException, exceptionDoc));
+				data.iter(parseException.bind(exceptionDoc));
 				property.exceptions.push(exceptionDoc);
 			case "apiData":
 				// Constant value of that property.

@@ -41,7 +41,7 @@ class ClassDoc
 		return methods.filter(function(doc : MethodDoc) : Bool {
 			if (doc.name == methodName) return true;
 			return false;
-		}).first();
+		})[0];
 	}
 	
 	/**
@@ -52,6 +52,6 @@ class ClassDoc
 		return properties.filter(function(doc : PropertyDoc) : Bool {
 			if (doc.name == propertyName) return true;
 			return false;
-		}).first();
+		})[0];
 	}
 }

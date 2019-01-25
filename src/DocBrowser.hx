@@ -7,10 +7,10 @@ import content.PackageDoc;
  */
 class DocBrowser 
 {
-	private var _packagesDoc : Hash<PackageDoc>;
+	private var _packagesDoc : Map<String, PackageDoc>;
 	
 	public function new() {
-		_packagesDoc = new Hash<PackageDoc>();
+		_packagesDoc = new Map<String, PackageDoc>();
 	}
 	
 	public function addDocumentation(doc : PackageDoc) : Void

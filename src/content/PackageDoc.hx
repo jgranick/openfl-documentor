@@ -32,6 +32,6 @@ class PackageDoc
 		return classes.filter(function(doc : ClassDoc) : Bool {
 			if (doc.name == className) return true;
 			return false;
-		}).first();
+		})[0];
 	}
 }
