@@ -18,7 +18,9 @@ class Main
 {
 	/** Path to the documentation in the SVN repository. */
 	private static inline function DOCUMENTATION_URL() {
-		return "http://opensource.adobe.com/svn/opensource/flex/sdk/trunk/" +
+		// return "http://opensource.adobe.com/svn/opensource/flex/sdk/trunk/" +
+			// "frameworks/projects/playerglobal/bundles/%LOCALE%/docs";
+		return "https://raw.githubusercontent.com/apache/flex-sdk/master/" +
 			"frameworks/projects/playerglobal/bundles/%LOCALE%/docs";
 	}
 	
